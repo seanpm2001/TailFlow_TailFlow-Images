@@ -1,4 +1,6 @@
-FROM php:8.0-fpm
+ARG VERSION=8.0
+
+FROM php:${VERSION}-fpm
 
 COPY php.ini /usr/local/etc/php/conf.d/app.ini
 COPY fpm.conf /usr/local/etc/php-fpm.d/
@@ -8,15 +10,15 @@ RUN apt-get install -y libpq-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev
 
 # Configure and install PostgreSQL PDO extensions
 RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
-RUN docker-php-ext-install pdo pdo_pgsql pgsql exif
+RUN docker-php-ext-install pdo pdo_pgsql pgsql
 # Configure and install MySQL PDO extensions
 RUN docker-php-ext-configure pdo_mysql
 RUN docker-php-ext-install pdo_mysql
 # Configure and install GD extension
 RUN docker-php-ext-configure gd
 RUN docker-php-ext-install gd
-# Install zip
-RUN docker-php-ext-install zip
+# Install zip and exif
+RUN docker-php-ext-install zip exif
 # Install Intl extension
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
